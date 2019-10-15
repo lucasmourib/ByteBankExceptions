@@ -8,18 +8,12 @@ namespace _05_ByteBank
 		{
 			try
 			{
-				Metodo();
+				ContaCorrente conta = new ContaCorrente(456, 0);
 			}
-			catch (DivideByZeroException e)
-			{
-
-				Console.WriteLine(e.Message);
-				
-			}
-			catch (Exception e)
+			catch (ArgumentException e)
 			{
 				Console.WriteLine(e.Message);
-				
+				Console.WriteLine(e.ParamName);
 			}
 
 			Console.ReadLine();
