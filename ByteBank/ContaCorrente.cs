@@ -1,4 +1,5 @@
-﻿using ByteBank.Exceptions;
+﻿using ByteBank;
+using ByteBank.Exceptions;
 using System;
 
 namespace _05_ByteBank
@@ -7,8 +8,8 @@ namespace _05_ByteBank
 	{
 		public static int TotalDeContasCriadas { get; private set; }
 		public static int TaxaOperacao { get; private set; }
-
-
+		public int ContadorSaquesNaoPermitidos { get; private set; }
+		public int ContadorDeTransferenciasNaoPermitidas { get; private set; }
 		public int Agencia { get; }
 		public int Numero { get; }
 
@@ -32,7 +33,6 @@ namespace _05_ByteBank
 		public Cliente Titular { get; set; }
 		public ContaCorrente(int agencia, int numero)
 		{
-
 			if (agencia <= 0)
 			{
 				throw new ArgumentException("O argumentoagencia deve ser maior que 0.", nameof(agencia));
@@ -63,6 +63,7 @@ namespace _05_ByteBank
 
 			if (this.Saldo < valor)
 			{
+				this.ContadorSaquesNaoPermitidos++;
 				throw new SaldoInsuficienteException(_saldo, valor);
 			}
 
@@ -70,14 +71,22 @@ namespace _05_ByteBank
 
 		}
 
-		public void Transferir(ContaCorrente contaDestino, double valor)
+		public void Transferir(double valor, ContaCorrente contaDestino)
 		{
 			if (valor < 0)
 			{
 				throw new ArgumentException("O valor inválido para transferência ", nameof(valor));
 			}
+			try
+			{
+				Sacar(valor);
+			}
+			catch (SaldoInsuficienteException ex)
+			{
+				ContadorDeTransferenciasNaoPermitidas++;
+				throw new OperacaoFinanceiraException("Operação não realizada", ex);
+			}
 
-			this.Sacar(valor);
 			contaDestino.Depositar(valor);
 		}
 	}

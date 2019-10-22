@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ByteBank.Exceptions
+﻿namespace ByteBank.Exceptions
 {
-	class SaldoInsuficienteException : Exception
+	public class SaldoInsuficienteException : OperacaoFinanceiraException
 	{
 		public double Saldo { get; }
 		public double ValorSaque { get; }
@@ -15,13 +9,13 @@ namespace ByteBank.Exceptions
 		{
 
 		}
-	
-		public SaldoInsuficienteException(string mensagem) : base (mensagem)
+
+		public SaldoInsuficienteException(string mensagem) : base(mensagem)
 		{
 
 		}
 
-		public SaldoInsuficienteException(double saldo, double valorSaque) : this("Tentativa de saque no valor de" + valorSaque + " com saldo de " + saldo)
+		public SaldoInsuficienteException(double saldo, double valorSaque) : this("Tentativa de saque no valor de " + valorSaque + " com saldo de " + saldo)
 		{
 			this.Saldo = saldo;
 			this.ValorSaque = valorSaque;
